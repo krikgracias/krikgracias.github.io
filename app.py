@@ -1,6 +1,10 @@
 from flask import Flask, request, jsonify
 import io
 
+@app.route('/')
+def home():
+    return "Welcome to the Python Quiz App!"
+
 app = Flask(__name__)
 
 @app.route('/quiz', methods=['GET'])
