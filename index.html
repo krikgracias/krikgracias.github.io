@@ -1,1 +1,37 @@
-"Hello World" 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Python Quiz</title>
+</head>
+<body>
+    <h1>Python Quiz</h1>
+    <div id="quiz-container"></div>
+    <textarea id="code" placeholder="Write your Python code here"></textarea>
+    <button onclick="submitCode()">Submit</button>
+    <div id="output"></div>
+
+    <script>
+        fetch('/quiz')
+            .then(response => response.json())
+            .then(data => {
+                const quizContainer = document.getElementById('quiz-container');
+                quizContainer.innerHTML = data.map(q => `<p>${q.prompt}</p>`).join('');
+            });
+
+        function submitCode() {
+            const code = document.getElementById('code').value;
+            fetch('/submit', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ code: code })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const outputDiv = document.getElementById('output');
+                outputDiv.innerHTML = data.success ? `Output: ${data.output}` : `Error: ${data.error}`;
+            });
+        }
+    </script>
+</body>
+</html>
